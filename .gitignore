@@ -1,3 +1,6 @@
 /data
 /.vscode
 .python-version
+pytest.ini
+**/.pytest_cache/
+**/__pycache__/

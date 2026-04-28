@@ -5,6 +5,8 @@ from torch import Tensor
 
 class SinusoidalTimeEmbeddings(nn.Module):
     """
+    Args: __init__: C:int (channels)
+    Returns: (B, C) per time dim a int for each channel.
     Given a time step t, map it to a high dimensional vector of size D using sinusoidal signals of varying frequencies.
     t -> vector_D ---MLP---> vector_C
     C is the hidden channels of your noise_estimator
@@ -48,19 +50,3 @@ class SinusoidalTimeEmbeddings(nn.Module):
         # forward pass through the mlp. evrything before is not part of gradient update
         time_emb = self.mlp(time_emb)
         return time_emb
-
-
-D = 8
-i = torch.arange(D // 2)
-print(2 * i / 8)
-print(10000 ** (2 * i / D))
-t = torch.arange(3)
-t = t.view((t.shape[0], 1))
-angles = t / (10000 ** (2 * i / D))
-
-print(angles)
-time_emb = torch.zeros((3, D))
-time_emb[:, 0::2] = torch.sin(angles)
-time_emb[:, 1::2] = torch.cos(angles)
-
-print(time_emb)
