@@ -1,6 +1,4 @@
-import pytest
-
-from model.time_embeddings import SinusoidalTimeEmbeddings
+from model import SinusoidalTimeEmbeddings
 
 def test_sinusoidal_time_embeddings():
     import torch

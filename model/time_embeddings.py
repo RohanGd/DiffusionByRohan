@@ -1,9 +1,14 @@
-import torch.nn as nn
 import torch
-from torch import Tensor
+from torch import Tensor, nn
+from abc import ABC
 
 
-class SinusoidalTimeEmbeddings(nn.Module):
+class TimeEmbeddings(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+
+class SinusoidalTimeEmbeddings(TimeEmbeddings):
     """
     Args: __init__: C:int (channels)
     Returns: (B, C) per time dim a int for each channel.
@@ -33,9 +38,11 @@ class SinusoidalTimeEmbeddings(nn.Module):
 
         # pe(t)[2i] = sin(t / 10000 ^ 2i/D), pe(t)[2i+1] = cos(t / 10000 ^ 2i/D)
         B, _ = t.shape
-        time_emb = torch.zeros((B, self.D))
+        time_emb = torch.zeros((B, self.D), device=t.device, dtype=torch.float32)
         i = torch.arange(
-            self.D // 2
+            self.D // 2, 
+            dtype=torch.float32,
+            device=t.device
         )  # i is a vector of size D/2. since each i will generate one "sine" and one "cos" emb it is D/2
         # for each i generate sin and cos for the angle: t / 10000 ** 2i/D
         denominator = (
