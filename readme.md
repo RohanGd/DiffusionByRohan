@@ -31,7 +31,8 @@ $$
 
 ## Observations on backbone:
 1. Simple CNN
-Using Sigmoid vs tanh
-Adding residuals
-Batch size
-Unet vs CNN
+2. Using Sigmoid vs tanh
+3. Adding residuals
+4. Batch size
+5. Kernel size
+6. Unet vs CNN
