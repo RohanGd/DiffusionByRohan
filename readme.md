@@ -36,3 +36,4 @@ $$
 4. Batch size
 5. Kernel size
 6. Unet vs CNN
+7. SGD vs AdamW

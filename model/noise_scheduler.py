@@ -33,8 +33,13 @@ class UniformNoiseSchedule(DDPMNoiseSchedule):
         self.register_buffer('alpha_bars', alpha_bars)
         
     def forward(self, t: torch.Tensor):
-        # Indexing works cleanly with PyTorch tensors
-        return self.alphas[t]
+        """ Expects t in range [1, T]"""
+        has_negative = (t-1 < 0).any().item()
+        assert has_negative != True, "negative index t. t expects to be in range [1, T] not 0"
+        return self.alphas[t-1]
     
     def bar(self, t: torch.Tensor):
-        return self.alpha_bars[t]
+        """ Expects t in range [1, T]"""
+        has_negative = (t-1 < 0).any().item()
+        assert has_negative != True, "negative index t. t expects to be in range [1, T] not 0"
+        return self.alpha_bars[t-1]

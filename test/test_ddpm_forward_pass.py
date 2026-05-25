@@ -15,3 +15,7 @@ def test_ddpm_forward_pass():
     diffusion_model = DDPM(T=T, dim=(C, H, W), noise_schedule=noise_schedule, time_embedder=time_embedder, noise_estimator=noise_estimator)
 
     assert x_t.shape == diffusion_model(x_t, t).shape
+
+    sample = diffusion_model.sample((B, C, H, W))
+    assert sample.shape == x_t.shape
+    assert torch.isfinite(sample).all()

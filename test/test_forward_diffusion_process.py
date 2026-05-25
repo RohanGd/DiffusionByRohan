@@ -16,14 +16,15 @@ def test_forward_diffusion_process():
     x0 = x0.to(dtype=torch.float32, device=device)
 
     noise_scheduler = noise_scheduler.to(device=device)
-
+    t = torch.tensor([1], device =device, dtype=torch.long)
+    
     x1, noise_1 = forward_diffusion_process(
-        noise_scheduler=noise_scheduler, x0=x0, t=torch.tensor([0], device =device, dtype=torch.long)
+        noise_scheduler=noise_scheduler, x0=x0, t=t
     )
 
     assert x1.shape == noise_1.shape and x1.shape == x0.shape
-    alpha_bar_t = noise_scheduler.bar(0)
-    alpha_t = noise_scheduler(0)
+    alpha_bar_t = noise_scheduler.bar(t)
+    alpha_t = noise_scheduler(t)
 
 
     x0_rev_from_x1 = (1/torch.sqrt(alpha_t)) * (x1 - ((1-alpha_t) / torch.sqrt(1-alpha_bar_t)) * noise_1)
@@ -32,11 +33,11 @@ def test_forward_diffusion_process():
 
 
     x2, noise_2 = forward_diffusion_process(
-        noise_scheduler=noise_scheduler, x0=x1, t=torch.tensor([0], device =device, dtype=torch.long)
+        noise_scheduler=noise_scheduler, x0=x1, t=t
     )
     
-    alpha_bar_t = noise_scheduler.bar(0)
-    alpha_t = noise_scheduler(0)
+    alpha_bar_t = noise_scheduler.bar(t)
+    alpha_t = noise_scheduler(t)
     x1_rev_from_x2 = (1/torch.sqrt(alpha_t)) * (x2 - ((1-alpha_t) / torch.sqrt(1-alpha_bar_t)) * noise_2)
     assert torch.isclose(x1, x1_rev_from_x2).all().item() == True
 
